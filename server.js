@@ -1,24 +1,30 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 const welcomeMessage = {
   id: 0,
   from: "Bart",
   text: "Welcome to CYF chat system!",
 };
+
 //This array is our "data store".
 //We will start with one message in the array.
 //Note: messages will be lost when Glitch restarts our server.
 let messages = [welcomeMessage]
+
+
 // level3 [5] read only text whose text contains a given substring
 // teniolao-cyf-chat-server.glitch.me/messages/search?text=express
 app.get("/messages/search", (req, res)=> {
   const { term } = req.query
   console.log(term)
-
+  
   const filterMessages = messages.filter(message => message.text.toLowerCase().includes(term.toLowerCase()))
   console.log(filterMessages)
   res.send(filterMessages);
@@ -47,7 +53,7 @@ app.get("/messages/:id", function (req, res) {
 
 // [1] create a new message
 app.post("/messages", (req, res) => {
-   const { from, text } = req.body;
+  const { from, text } = req.body;
   // console.log(req.body)
   const ourMessageObject = {
     id: messages.length, 
@@ -58,7 +64,6 @@ app.post("/messages", (req, res) => {
   if(from.length === 0 || text.length === 0){
     return res.status(400).send("please complete body")
   } else {
-     messages.push(ourMessage);
      messages.push(ourMessageObject);
   }
 });
